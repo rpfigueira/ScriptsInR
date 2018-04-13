@@ -1,3 +1,6 @@
+# This R script can be used to clip the Worldclim raster layers using a shapefile polygon that defines a training region for a maxent model
+
+
 # Load libraries
 library(rgdal)
 library(raster)
