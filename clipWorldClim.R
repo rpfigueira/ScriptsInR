@@ -10,25 +10,27 @@ subDirName = "clip"
 outputFolder <- paste(getwd(),"/",subDirName,sep="")
 dir.create(outputFolder)
 
-# Set the patColocar aqui o caminho completo para a shapefile de treino, incluindo o nome do ficheiro"
+# Set the complete path to the training region shapefile"
 treino <- "/Users/rfigueira/Documents/workspace/africa/ANGOLA/regiaoTreinoAngola.shp"
 
+# Load training region
 mask <- readOGR(treino)
 
-#clip da layer altitude
+#First, clip the altitude layer. Check if you need to run this
 raster <- raster("./altitude.asc")
 rasterClip <- crop(raster,mask)
 rasterMask <- mask(rasterClip,mask)
 filename=paste(outputFolder,"/","altitude.asc",sep="")
-writeRaster(bioClip, filename, format="ascii", overwrite=TRUE)
-print("Clip de altitude completo")
+writeRaster(rasterMask, filename, format="ascii", overwrite=TRUE)
+print("Clip of layer altitude completed")
 
+# Clip all 19 Worldclim Bioclim layers
 for (i in 1:19){
   rasterName <- paste("./bio", i, ".asc",sep="")
   bio <- raster(rasterName)
   bioClip <- crop(bio,mask)
-  bioClip <- mask(bioClip,mask)
+  bioMask <- mask(bioClip,mask)
   filename=paste(outputFolder,"/",rasterName,sep="")
-  writeRaster(bioClip, filename, format="ascii", overwrite=TRUE)
+  writeRaster(bioMask, filename, format="ascii", overwrite=TRUE)
   print(paste("Clip de bio",i," completo.",sep=""))
 }
